@@ -108,21 +108,25 @@ isr_vector:
 #####################################################
 start:
     # Setup stack pointer
-    lui sp, %hi(_sp)
-    add sp, sp, %lo(_sp)
+    lw sp, (sp)
+    #lui sp, %hi(_sp)
+    #add sp, sp, %lo(_sp)
 
     # Setup IRQ vector
-    lui t0, %hi(isr_vector)
-    add t0, t0, %lo(isr_vector)
+    lw t0, isr_vector
+    #ui t0, %hi(isr_vector)
+    #dd t0, t0, %lo(isr_vector)
     csrw mtvec, t0
 
     # t0 = _bss_start
-    lui t0,%hi(_bss_start)
-    add t0,t0,%lo(_bss_start)
+    lw t0, _bss_start
+    #lui t0,%hi(_bss_start)
+    #add t0,t0,%lo(_bss_start)
     
     # t1 = _end
-    lui t1,%hi(_end)
-    add t1,t1,%lo(_end)
+    lw t1, _end
+    #lui t1,%hi(_end)
+    #add t1,t1,%lo(_end)
 
 bss_clear:
     sw x0,  (0)(t0)        # Write 0x00 to mem[t0]

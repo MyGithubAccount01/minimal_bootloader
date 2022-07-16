@@ -2,21 +2,22 @@
 # Variables: System specific options
 ###############################################################################
 # Linux image
-VMLINUX ?=
-ifeq ($(VMLINUX),)
-  ${error VMLINUX must be specified}
-endif
-DTS_FILE ?=
-ifeq ($(DTS_FILE),)
-  ${error DTS_FILE must be specified}
-endif
-LINUX_DIR ?=
-ifeq ($(LINUX_DIR),)
-  ${error LINUX_DIR must be specified (LINUX kernel source tree base)}
-endif
+#VMLINUX ?=
+#ifeq ($(VMLINUX),)
+#  ${error VMLINUX must be specified}
+#endif
+#DTS_FILE ?=
+#ifeq ($(DTS_FILE),)
+#  ${error DTS_FILE must be specified}
+#endif
+#LINUX_DIR ?=
+#ifeq ($(LINUX_DIR),)
+#  ${error LINUX_DIR must be specified (LINUX kernel source tree base)}
+#endif
 
 # Toolchain path/prefix
-TOOLCHAIN_PREFIX ?= riscv32-unknown-elf-
+#TOOLCHAIN_PREFIX ?= riscv32-unknown-elf-
+TOOLCHAIN_PREFIX ?= riscv64-unknown-elf-
 
 # Link kernel / dtb into ELF
 CONFIG_KERNEL_EMBEDDED ?= y
@@ -83,8 +84,9 @@ EXTRA_CFLAGS+= -Wno-unused-variable
 BASE_ADDRESS      = 0x80000000
 PLATFORM_LDFLAGS  = -nostartfiles -nodefaultlibs -nostdlib -lgcc -T./custom.ld
 
-OPT        ?= 2
-CFLAGS	   := -Ttext $(BASE_ADDRESS) -O$(OPT) -g -Wall $(patsubst %,-I%,$(SRC_DIR)) $(EXTRA_CFLAGS)
+MCMODEL    ?= medany
+OPT        ?= 0
+CFLAGS	   := -Ttext $(BASE_ADDRESS) -O$(OPT) -g -Wall $(patsubst %,-I%,$(SRC_DIR)) $(EXTRA_CFLAGS) -mcmodel=$(MCMODEL)
 ASFLAGS    := 
 LDFLAGS    := $(PLATFORM_LDFLAGS) -Wl,--defsym=BASE_ADDRESS=$(BASE_ADDRESS)
 
